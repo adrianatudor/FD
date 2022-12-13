@@ -67,6 +67,15 @@ const App = () => {
             setNotification(null)
           }, 5000);
       })
+      .catch(error => {
+        // this is the way to access the error message
+        setNotification(error.response.data.error);
+        setNotificationType('error');
+        
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
     }
 
     setNewName('');
