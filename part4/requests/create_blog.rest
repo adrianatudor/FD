@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa2thcCIsImlkIjoiNjM5Y2EwNWFlMWNhZGNhMmFlMGYzNDNkIiwiaWF0IjoxNjcxMjExMDY2fQ.xChdvNpkRl27_xD7dKUtLi_n5DxVLm5t5butnAV5ZkE
+
+{
+    "title": "To be deleted",
+    "author": "Kristiina Han",
+    "url": "www.myblog.com",
+    "likes": 10
+}
