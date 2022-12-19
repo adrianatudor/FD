@@ -160,7 +160,8 @@ describe('deletion of a blog', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const blogToDelete = res.body;
+    const blogToDelete = res.body
+
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .set('Authorization', 'bearer ' + token)
@@ -178,26 +179,41 @@ describe('deletion of a blog', () => {
 
 describe('update of a blog', () => {
   test('succeeds with status code 200 if id is valid', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToUpdate = blogsAtStart[0]
-
-    const newInfo = {
-      ...blogsAtStart[0], author: 'Maya Rudolph'
+    let toBeUpdated = {
+      title: 'Tutorial for DeepGazeIII',
+      author: 'Maria Johnson',
+      url: 'www.myblog.com',
+      likes: 10
     }
 
+    const user = await api.post('/api/login').send({ username: 'niklas', password: 'blueSky' })
+
+    const token = JSON.parse(user.text).token
+
+    const res = await api
+      .post('/api/blogs')
+      .set('Authorization', 'bearer ' + token)
+      .send(toBeUpdated)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    toBeUpdated = res.body
+    toBeUpdated.author = 'Maya Rudolph'
+
     await api
-      .put(`/api/blogs/${blogToUpdate.id}`)
-      .send(newInfo)
+      .put(`/api/blogs/${toBeUpdated.id}`)
+      .set('Authorization', 'bearer ' + token)
+      .send(toBeUpdated)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
     const blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-    const titles = blogsAtEnd.map(b => b.title)
+    const authors = blogsAtEnd.map(b => b.author)
 
-    expect(titles).toContain(newInfo.title)
+    expect(authors).toContain(toBeUpdated.author)
   })
 })
 
